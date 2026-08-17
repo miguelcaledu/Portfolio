@@ -167,15 +167,15 @@
             </div>
             <div id="{{ g.trackId }}" class="no-bar" onClick="{{ trackClick }}" onPointerDown="{{ dragStart }}" onPointerMove="{{ dragMove }}" onPointerUp="{{ dragEnd }}" onPointerLeave="{{ dragEnd }}" style="display:flex; gap:28px; overflow-x:auto; cursor:grab; padding-bottom:10px; scrollbar-width:none;">
               <sc-for list="{{ g.projects }}" as="p" hint-placeholder-count="3">
-                <a class="work-card" href="{{ p.href }}" target="{{ p.target }}" rel="noreferrer" style="flex:0 0 {{ p.cardWidth }}; min-width:0; max-width:{{ p.cardWidth }}; display:flex; flex-direction:column; gap:18px; text-decoration:none; cursor:pointer; transition:transform 400ms cubic-bezier(.22,1,.36,1);" style-hover="transform:translateY(-6px);">
+                <a class="work-card" href="{{ p.href }}" target="{{ p.target }}" rel="noreferrer" onClick="{{ p.onCardClick }}" style="flex:0 0 {{ p.cardWidth }}; min-width:0; max-width:{{ p.cardWidth }}; display:flex; flex-direction:column; gap:18px; text-decoration:none; cursor:pointer; transition:transform 400ms cubic-bezier(.22,1,.36,1);" style-hover="transform:translateY(-6px);">
                   <div style="position:relative; aspect-ratio:{{ p.imgRatio }}; overflow:hidden; border-radius:2px;">
                     <div class="work-img" style="position:absolute; inset:0; background:{{ p.bg }}; transition:transform 600ms cubic-bezier(.22,1,.36,1);"></div>
                     <span class="work-corner" style="position:absolute; top:15px; right:18px; font-family:var(--font-body); font-size:22px; letter-spacing:0.16em; color:var(--text-secondary); transition:transform 300ms cubic-bezier(.22,1,.36,1);">{{ p.corner }}</span>
-                    <span style="position:absolute; left:0; bottom:0; padding:18px 20px; font-family:var(--font-display); font-size:34px; line-height:1.1; color:var(--text-primary); opacity:{{ p.nameOpacity }};">{{ p.client }}</span>
+                    <span style="position:absolute; left:0; bottom:0; padding:18px 20px; font-family:var(--font-display); font-size:{{ p.nameSize }}; line-height:1.1; color:var(--text-primary); opacity:{{ p.nameOpacity }};">{{ p.client }}</span>
                   </div>
                   <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px;">
                     <div style="display:flex; flex-direction:column; gap:9px; min-width:0;">
-                      <span class="work-title" style="font-family:var(--font-display); font-size:31px; line-height:1.1; color:var(--text-primary); transition:color 200ms ease;">{{ p.client }}</span>
+                      <span class="work-title" style="font-family: var(--font-display); font-size: 21px; line-height: 1.1; color: var(--text-primary); transition: color 200ms ease">{{ p.client }}</span>
                       <span style="display:inline-flex; align-self:flex-start; align-items:center; font-family:var(--font-body); font-size:19px; font-weight:500; letter-spacing:0.16em; text-transform:uppercase; padding:5px 10px; border-radius:2px; border:1px solid var(--border-default); color:var(--text-secondary); line-height:1.35; white-space:normal;">{{ p.type }}</span>
                     </div>
                     <span style="font-family:var(--font-body); font-size:21px; color:var(--text-secondary); padding-top:4px; white-space:nowrap;">{{ p.year }}</span>
@@ -313,11 +313,21 @@
     </div>
   </sc-if>
 
+  <!-- VIDEO LIGHTBOX -->
+  <sc-if value="{{ videoLightboxOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeVideoLightbox }}" style="position:fixed; inset:0; z-index:100; background:rgba(26,26,26,0.92); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:clamp(24px,5vw,72px); animation:lbFade 220ms ease both;">
+      <button onClick="{{ closeVideoLightbox }}" style="position:absolute; top:24px; right:28px; width:44px; height:44px; display:flex; align-items:center; justify-content:center; background:transparent; border:none; color:rgba(255,255,255,0.7); font-size:38px; line-height:1; cursor:pointer; font-family:var(--font-body);" style-hover="color:#fff;">×</button>
+      <div onClick="{{ stopProp }}" style="display:flex; flex-direction:column; align-items:center; gap:18px; max-width:100%; animation:lbZoom 280ms cubic-bezier(.22,1,.36,1) both;">
+        <video src="{{ videoLightboxSrc }}" controls="" autoplay="" playsinline="" style="width:min(60vw,480px); max-height:82vh; border-radius:2px; background:#000;"></video>
+      </div>
+    </div>
+  </sc-if>
+
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { filter: 'All', lightboxIndex: null, sent: false, submitting: false, error: false, isMobile: false, menuOpen: false, lang: 'pt' };
+  state = { filter: 'All', lightboxIndex: null, videoLightbox: null, sent: false, submitting: false, error: false, isMobile: false, menuOpen: false, lang: 'pt' };
 
   COPY = {
     en: {
@@ -329,8 +339,8 @@ class Component extends DCLogic {
       heroBtnWork: 'View work', heroBtnPhoto: 'Photography',
       workEyebrow: '01 — Selected Work', workTitle: 'Website, Branding, Design & Social Media',
       workDesc: 'Identity, interface, social and graphic design — for restaurants, supper clubs and food-led ventures.',
-      filters: { All: 'All', Web: 'Web', Branding: 'Branding', Social: 'Social Media', Graphic: 'Graphic Design', Photography: 'Photography' },
-      rowWeb: 'Websites & Web Design', rowBrand: 'Branding & Graphic Design', rowSocial: 'Social Media & Photography',
+      filters: { All: 'All', Web: 'Web', Branding: 'Branding', Social: 'Social Media', Graphic: 'Graphic Design', Photography: 'Photography', Content: 'Content Creation' },
+      rowWeb: 'Websites & Web Design', rowBrand: 'Branding & Graphic Design', rowSocial: 'Social Media', rowContent: 'Content Creation',
       photoEyebrow: '02 — Photography', photoTitle: 'Food Photography',
       photoDesc: 'Plates, produce and the moments around service.',
       photoHint: 'Hover to pause · click to enlarge',
@@ -358,8 +368,8 @@ class Component extends DCLogic {
       heroBtnWork: 'Ver trabalho', heroBtnPhoto: 'Fotografia',
       workEyebrow: '01 — Trabalho Selecionado', workTitle: 'Website, Branding, Design & Social Media',
       workDesc: 'Identidade, interface, redes sociais e design gráfico — para restaurantes, supper clubs e projetos ligados à gastronomia.',
-      filters: { All: 'Todos', Web: 'Web', Branding: 'Branding', Social: 'Redes Sociais', Graphic: 'Design Gráfico', Photography: 'Fotografia' },
-      rowWeb: 'Websites & Web Design', rowBrand: 'Branding & Design Gráfico', rowSocial: 'Redes Sociais & Fotografia',
+      filters: { All: 'Todos', Web: 'Web', Branding: 'Branding', Social: 'Redes Sociais', Graphic: 'Design Gráfico', Photography: 'Fotografia', Content: 'Criação de Conteúdo' },
+      rowWeb: 'Websites & Web Design', rowBrand: 'Branding & Design Gráfico', rowSocial: 'Redes Sociais', rowContent: 'Criação de Conteúdo',
       photoEyebrow: '02 — Fotografia', photoTitle: 'Food Photography',
       photoDesc: 'Pratos, produtos e os momentos à volta do serviço.',
       photoHint: 'Passa o rato para parar · clica para ampliar',
@@ -384,10 +394,21 @@ class Component extends DCLogic {
     { client: 'Boato Supper Club', type: { en: 'Branding · Full-Stack Web Dev', pt: 'Branding · Desenvolvimento Web Full-Stack' }, year: '2026', category: 'Web', site: true, tone: '#D0D8E3', img: 'uploads/Screenshot 2026-07-01 at 13.49.07.png', corner: '↗', href: 'https://boatosupperclub.com', external: true },
     { client: 'Marques & Andrade', type: { en: 'Full-Stack Web Dev', pt: 'Desenvolvimento Web Full-Stack' }, year: '2026', category: 'Web', site: true, tone: '#1A1A1A', img: 'uploads/Screenshot 2026-07-01 at 14.32.29.png', corner: '', href: '#work', external: false },
     { client: 'Bar - Clandestino', type: { en: 'Graphic Design · Menus', pt: 'Design Gráfico · Menus' }, year: '2025', category: 'Graphic', tone: '#C6CFDC', img: 'uploads/Placa Clandestino .png', corner: '', href: '#work', external: false },
+    { client: 'Pitch Productions', type: { en: 'Graphic Design · Poster', pt: 'Design Gráfico · Cartaz' }, year: '2026', category: 'Graphic', tone: '#E8DFD0', img: 'uploads/Pitch Poster - 26 Jun _2026_Insta Format.png', corner: '', href: '#work', external: false },
     { client: 'A Casa da Lapa', type: { en: 'Full-Stack Web Dev', pt: 'Desenvolvimento Web Full-Stack' }, year: '2026', category: 'Web', site: true, tone: 'var(--color-linen)', img: 'uploads/Screenshot 2026-07-01 at 13.51.05.png', corner: '↗', href: 'https://acasadalapa.com', external: true },
+    { client: 'Boato x Taberna Sakra', type: { en: 'Graphic Design · Event Poster', pt: 'Design Grafico . Post de Pop-Up' }, year: '2026', category: 'Graphic', tone: '#F3EDE3', img: 'uploads/Menu - PopUp - Sakra-1.jpg', corner: '', href: '#work', external: false },
     { client: '@boatosupperclub', type: { en: 'Social Media', pt: 'Redes Sociais' }, year: '2026', category: 'Social', tone: '#D0D8E3', img: 'uploads/IMG_4911-5069d672.jpg', corner: '↗', href: 'https://instagram.com/boato.', external: true },
     { client: '@anossacasa.restaurante', type: { en: 'Social Media · Photography', pt: 'Redes Sociais · Fotografia' }, year: '2023', category: 'Social', tone: '#C6CFDC', img: 'uploads/Screenshot 2026-07-02 at 09.27.36.png', corner: '↗', href: 'https://instagram.com/anossacasa.restaurante', external: true },
     { client: '@acasadalapa.azores', type: { en: 'Social Media', pt: 'Redes Sociais' }, year: '2026', category: 'Social', tone: 'var(--color-sand)', img: 'uploads/IMG_4912-4e3b89aa.jpg', corner: '↗', href: 'https://instagram.com/acasadalapa', external: true },
+    { client: 'Boato Supper Club', type: { en: 'Content Creation', pt: 'Design Grafico . Post de Colab' }, year: '2026', category: 'Graphic', tone: '#D0D8E3', img: 'uploads/Instagram post - boato x greens & nuts-d93e0545.jpg', corner: '', href: '#work', external: false },
+    { client: '@comcertezalisboa', type: { en: 'Social Media', pt: 'Redes Sociais' }, year: '2026', category: 'Social', tone: '#C6D4B5', img: 'uploads/Frame 12.jpg', corner: '↗', href: '#work', external: false },
+    { client: 'Boato Supper Club', type: { en: 'Story', pt: 'Story' }, year: '2026', category: 'Content', tone: '#2A2622', img: 'uploads/Instagram story - 28.jpg', corner: '', href: '#work', external: false },
+    { client: 'Boato Supper Club', type: { en: 'Story', pt: 'Story' }, year: '2026', category: 'Content', tone: '#C7C2B8', img: 'uploads/Lavagante.jpg', corner: '', href: '#work', external: false },
+    { client: 'Com Certeza', type: { en: 'Video', pt: 'Vídeo' }, year: '2026', category: 'Content', tone: '#3D3327', img: 'uploads/Com Certeza - Acorda.jpg', video: 'uploads/videos/Com Certeza - Acorda.mp4', corner: '▶', href: '#work', external: false },
+    { client: 'Boato Supper Club', type: { en: 'Story', pt: 'Story' }, year: '2026', category: 'Content', tone: '#B23A2E', img: 'uploads/Ribs 2.jpg', corner: '', href: '#work', external: false },
+    { client: 'Boato x Taberna Sakra', type: { en: 'Story', pt: 'Story' }, year: '2026', category: 'Content', tone: '#3A3B38', img: 'uploads/Sakra Sold Out 2.jpg', corner: '', href: '#work', external: false },
+    { client: 'Com Certeza', type: { en: 'Video', pt: 'Vídeo' }, year: '2026', category: 'Content', tone: '#2E2620', img: 'uploads/Com Certeza - Cabidela.jpg', video: 'uploads/videos/Com Certeza - Cabidela.mp4', corner: '▶', href: '#work', external: false },
+    { client: 'Boato Supper Club', type: { en: 'Story', pt: 'Story' }, year: '2026', category: 'Content', tone: '#4A4238', img: 'uploads/private chef.PNG', corner: '', href: '#work', external: false },
     { client: 'Ai4Chef', type: { en: 'Branding · UI/UX', pt: 'Branding · UI/UX' }, year: '2025', category: 'Web', site: true, tone: 'var(--color-sand)', img: 'uploads/Screenshot 2026-07-01 at 14.25.49.png', corner: '↗', href: 'https://ai4chef.com', external: true },
   ];
 
@@ -426,6 +447,7 @@ class Component extends DCLogic {
 
     this._onKey = (e) => {
       if (e.key === 'Escape' && this.state.menuOpen) this.setState({ menuOpen: false });
+      if (e.key === 'Escape' && this.state.videoLightbox) this.setState({ videoLightbox: null });
       if (this.state.lightboxIndex === null) return;
       if (e.key === 'Escape') this.setState({ lightboxIndex: null });
       else if (e.key === 'ArrowLeft') this.shift(-1);
@@ -505,7 +527,7 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const { filter, lightboxIndex, sent, isMobile, menuOpen, lang } = this.state;
+    const { filter, lightboxIndex, videoLightbox, sent, isMobile, menuOpen, lang } = this.state;
     const t = this.COPY[lang];
     const FILTERS = ['All', 'Web', 'Branding', 'Social', 'Graphic', 'Photography'];
 
@@ -518,12 +540,13 @@ class Component extends DCLogic {
         : baseBtn + ' border:1px solid var(--border-default); color:var(--text-secondary);',
     }));
 
-    const mapProject = (p, i) => ({ ...p, type: p.type[lang], target: p.external ? '_blank' : '_self', delay: i * 70, bg: p.img ? ("#ffffff url('" + p.img + "') top center / cover no-repeat") : p.tone, nameOpacity: p.img ? '0' : '0.62', cardWidth: p.site ? 'clamp(300px,90vw,480px)' : 'clamp(260px,80vw,330px)', imgRatio: p.site ? '16/9' : '4/5' });
+    const mapProject = (p, i) => ({ ...p, type: p.type[lang], target: p.video && !isMobile ? '_self' : p.external ? '_blank' : '_self', delay: i * 70, bg: p.img ? ("#ffffff url('" + p.img + "') top center / " + (p.category === 'Content' ? 'contain' : 'cover') + " no-repeat") : p.tone, nameOpacity: p.img ? '0' : '0.62', cardWidth: p.category === 'Content' ? 'clamp(200px,60vw,260px)' : p.site ? 'clamp(300px,90vw,480px)' : 'clamp(260px,80vw,330px)', imgRatio: p.category === 'Content' ? '9/16' : p.site ? '16/9' : '4/5', nameSize: p.client.startsWith('@') ? '25px' : '34px', titleSize: p.client.startsWith('@') ? '23px' : '31px', onCardClick: p.video && !isMobile ? (e) => { e.preventDefault(); this.setState({ videoLightbox: p.video }); } : undefined });
 
     const groupDefs = [
       { key: 'web', label: t.rowWeb, cats: ['Web'] },
       { key: 'social', label: t.rowSocial, cats: ['Social', 'Photography'] },
       { key: 'brand', label: t.rowBrand, cats: ['Branding', 'Graphic'] },
+      { key: 'content', label: t.rowContent, cats: ['Content'] },
     ];
     const scrollTrack = (id, dir) => { const tk = document.getElementById(id); if (tk) tk.scrollBy({ left: dir * Math.max(300, tk.clientWidth * 0.8), behavior: 'smooth' }); };
     const workGroups = groupDefs.map((g) => {
@@ -600,6 +623,9 @@ class Component extends DCLogic {
       closeLightbox: () => this.setState({ lightboxIndex: null }),
       prevPhoto: () => this.shift(-1),
       nextPhoto: () => this.shift(1),
+      videoLightboxOpen: videoLightbox !== null,
+      videoLightboxSrc: videoLightbox || '',
+      closeVideoLightbox: () => this.setState({ videoLightbox: null }),
       stopProp: (e) => e.stopPropagation(),
       currentLabel: current ? current.label[lang] : '',
       currentBg: current ? ("#0e0e0e url('" + current.img + "') center / cover no-repeat") : '#0e0e0e',
