@@ -147,9 +147,9 @@
   <section id="work" data-screen-label="Work" style="scroll-margin-top: 84px; padding: clamp(64px,10vh,110px) clamp(24px,5vw,64px); border-top: 1px solid var(--divider); background-color: #FFFFFF">
     <div style="max-width:1240px; margin:0 auto;">
       <div data-reveal="" style="display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:32px; margin-bottom:clamp(40px,6vh,64px);">
-        <div style="max-width:48ch;">
+        <div style="width:min(960px,100%);">
           <p style="margin:0 0 16px; font-family:var(--font-body); font-size:19px; letter-spacing:0.16em; text-transform:uppercase; color:var(--text-secondary);">{{ t.workEyebrow }}</p>
-          <h2 style="margin: 0 0 18px; font-family: var(--font-display); font-weight: 300; font-size:clamp(42px,5vw,62px); line-height: 1.05; letter-spacing: 0.01em; color: var(--text-primary); width: 555px">{{ t.workTitle }}</h2>
+          <h2 style="margin: 0 0 18px; font-family: var(--font-display); font-weight: 300; font-size:clamp(42px,5vw,62px); line-height: 1.05; letter-spacing: 0.01em; color: var(--text-primary); width: 100%">{{ t.workTitle }}</h2>
           <p style="margin:0; font-family:var(--font-body); font-size:24px; line-height:1.7; color:var(--text-primary); opacity:0.78;">{{ t.workDesc }}</p>
         </div>
       </div>
@@ -397,11 +397,11 @@ class Component extends DCLogic {
     { client: 'Pitch Productions', type: { en: 'Graphic Design · Poster', pt: 'Design Gráfico · Cartaz' }, year: '2026', category: 'Graphic', tone: '#E8DFD0', img: 'uploads/Pitch Poster - 26 Jun _2026_Insta Format.png', corner: '', href: '#work', external: false },
     { client: 'A Casa da Lapa', type: { en: 'Full-Stack Web Dev', pt: 'Desenvolvimento Web Full-Stack' }, year: '2026', category: 'Web', site: true, tone: 'var(--color-linen)', img: 'uploads/Screenshot 2026-07-01 at 13.51.05.png', corner: '↗', href: 'https://acasadalapa.com', external: true },
     { client: 'Boato x Taberna Sakra', type: { en: 'Graphic Design · Event Poster', pt: 'Design Grafico . Post de Pop-Up' }, year: '2026', category: 'Graphic', tone: '#F3EDE3', img: 'uploads/Menu - PopUp - Sakra-1.jpg', corner: '', href: '#work', external: false },
-    { client: '@boatosupperclub', type: { en: 'Social Media', pt: 'Redes Sociais' }, year: '2026', category: 'Social', tone: '#D0D8E3', img: 'uploads/IMG_4911-5069d672.jpg', corner: '↗', href: 'https://instagram.com/boato.', external: true },
-    { client: '@anossacasa.restaurante', type: { en: 'Social Media · Photography', pt: 'Redes Sociais · Fotografia' }, year: '2023', category: 'Social', tone: '#C6CFDC', img: 'uploads/Screenshot 2026-07-02 at 09.27.36.png', corner: '↗', href: 'https://instagram.com/anossacasa.restaurante', external: true },
-    { client: '@acasadalapa.azores', type: { en: 'Social Media', pt: 'Redes Sociais' }, year: '2026', category: 'Social', tone: 'var(--color-sand)', img: 'uploads/IMG_4912-4e3b89aa.jpg', corner: '↗', href: 'https://instagram.com/acasadalapa', external: true },
+    { client: '@boatosupperclub', type: { en: 'Social Media', pt: 'Redes Sociais' }, year: '2026', category: 'Social', tone: '#D0D8E3', img: 'uploads/IMG_4911-5069d672.jpg', corner: '↗', href: 'https://www.instagram.com/boato.supperclub/', external: true },
+    { client: '@anossacasa.restaurante', type: { en: 'Social Media · Photography', pt: 'Redes Sociais · Fotografia' }, year: '2023', category: 'Social', tone: '#C6CFDC', img: 'uploads/Screenshot 2026-07-02 at 09.27.36.png', corner: '↗', href: 'https://www.instagram.com/anossacasa.restaurante/', external: true },
+    { client: '@acasadalapa.azores', type: { en: 'Social Media', pt: 'Redes Sociais' }, year: '2026', category: 'Social', tone: 'var(--color-sand)', img: 'uploads/IMG_4912-4e3b89aa.jpg', corner: '↗', href: 'https://www.instagram.com/acasadalapa.azores/', external: true },
     { client: 'Boato Supper Club', type: { en: 'Content Creation', pt: 'Design Grafico . Post de Colab' }, year: '2026', category: 'Graphic', tone: '#D0D8E3', img: 'uploads/Instagram post - boato x greens & nuts-d93e0545.jpg', corner: '', href: '#work', external: false },
-    { client: '@comcertezalisboa', type: { en: 'Social Media', pt: 'Redes Sociais' }, year: '2026', category: 'Social', tone: '#C6D4B5', img: 'uploads/Frame 12.jpg', corner: '↗', href: '#work', external: false },
+    { client: '@comcertezalisboa', type: { en: 'Social Media', pt: 'Redes Sociais' }, year: '2026', category: 'Social', tone: '#C6D4B5', img: 'uploads/Frame 12.jpg', corner: '↗', href: 'https://www.instagram.com/comcertezalisboa/', external: true },
     { client: 'Boato Supper Club', type: { en: 'Story', pt: 'Story' }, year: '2026', category: 'Content', tone: '#2A2622', img: 'uploads/Instagram story - 28.jpg', corner: '', href: '#work', external: false },
     { client: 'Boato Supper Club', type: { en: 'Story', pt: 'Story' }, year: '2026', category: 'Content', tone: '#C7C2B8', img: 'uploads/Lavagante.jpg', corner: '', href: '#work', external: false },
     { client: 'Com Certeza', type: { en: 'Video', pt: 'Vídeo' }, year: '2026', category: 'Content', tone: '#3D3327', img: 'uploads/Com Certeza - Acorda.jpg', video: 'uploads/videos/Com Certeza - Acorda.mp4', corner: '▶', href: '#work', external: false },
